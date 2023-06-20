@@ -1,0 +1,4 @@
+name: NoobLand
+version: 0.0
+api-version: 1.19
+main: fr.dtn.noobland.Plugin
