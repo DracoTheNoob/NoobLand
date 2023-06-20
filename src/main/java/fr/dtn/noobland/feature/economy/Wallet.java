@@ -1,39 +1,50 @@
 package fr.dtn.noobland.feature.economy;
 
-import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class Wallet {
     private final UUID owner;
     private double balance;
 
-    public Wallet(UUID owner, double balance){
-        this.owner = owner;
-        this.balance = balance;
-    }
-
-    public Wallet(File directory, UUID owner){
+    public Wallet(Connection connection, UUID owner){
         this.owner = owner;
 
-        try(FileReader read = new FileReader(getFile(directory, owner)); BufferedReader reader = new BufferedReader(read)){
-            String line = reader.readLine();
-            this.balance = Double.parseDouble(line);
-        }catch(FileNotFoundException e){
-            this.balance = 0;
-        }catch(IOException e){
-            e.printStackTrace();
+        try {
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM economy WHERE id = ?");
+            query.setString(1, owner.toString());
+            ResultSet set = query.executeQuery();
+
+            if(set.next()){
+                this.balance = set.getDouble("balance");
+            }else{
+                this.balance = 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void save(File directory){
-        File file = getFile(directory, owner);
-        this.balance = (int)(balance * 1000) / 1000.0;
+    public void save(Connection connection){
+        try{
+            delete(connection);
 
-        try(FileWriter write = new FileWriter(file); BufferedWriter writer = new BufferedWriter(write)){
-            writer.write(String.valueOf(balance));
-        }catch(IOException e){
-            e.printStackTrace();
+            PreparedStatement query = connection.prepareStatement("INSERT INTO economy VALUES(?, ?)");
+            query.setString(1, owner.toString());
+            query.setDouble(2, balance);
+            query.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
         }
+    }
+
+    public void delete(Connection connection) throws SQLException{
+        PreparedStatement query = connection.prepareStatement("DELETE FROM economy WHERE id = ?");
+        query.setString(1, owner.toString());
+        query.execute();
     }
 
     public void add(double money){
@@ -46,6 +57,4 @@ public class Wallet {
     }
     public double getBalance(){ return balance; }
     public UUID getOwner() { return owner; }
-
-    public File getFile(File directory, UUID owner){ return new File(directory, owner.toString() + ".wallet"); }
 }

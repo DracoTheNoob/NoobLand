@@ -9,9 +9,11 @@ import fr.dtn.noobland.commands.home.CommandHome;
 import fr.dtn.noobland.commands.home.CommandHomes;
 import fr.dtn.noobland.commands.home.CommandSetHome;
 import fr.dtn.noobland.commands.ranks.CommandRank;
+import fr.dtn.noobland.db.Database;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
 import fr.dtn.noobland.feature.home.HomeManager;
+import fr.dtn.noobland.feature.levels.LevelManager;
 import fr.dtn.noobland.feature.rank.RankManager;
 import fr.dtn.noobland.listener.Listener;
 import fr.dtn.noobland.listener.economy.EntityDamageByEntityListener;
@@ -31,16 +33,21 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
 
 public class Plugin extends JavaPlugin{
+    private Database database;
     private MessageManager messageManager;
     private HomeManager homeManager;
     private RankManager rankManager;
     private EconomyManager economyManager;
     private FightManager fightManager;
+    private LevelManager levelManager;
 
     @Override
     public void onLoad() {
+        this.database = new Database();
+
         File file = new File(getDirectory(), "messages.yml");
 
         try {
@@ -55,6 +62,7 @@ public class Plugin extends JavaPlugin{
         this.rankManager = new RankManager(this);
         this.economyManager = new EconomyManager(this);
         this.fightManager = new FightManager(this);
+        this.levelManager = new LevelManager(this);
 
         registerCommands(
                 CommandSpawn.class,
@@ -74,15 +82,21 @@ public class Plugin extends JavaPlugin{
                 EntitySpawnListener.class, EntityDeathListener.class, EntityDamageListener.class,
                 EntityDamageByEntityListener.class
         );
-
-        // TODO : replace yaml storing system by mysql
     }
 
+    @Override
+    public void onDisable() {
+        this.database.close();
+    }
+
+    public Database getDatabase() { return database; }
+    public Connection getDbConnection() { return database.getConnection(); }
     public MessageManager getMessageManager() { return messageManager; }
     public HomeManager getHomeManager() { return homeManager; }
     public RankManager getRankManager() { return rankManager; }
     public EconomyManager getEconomyManager() { return economyManager; }
     public FightManager getFightManager() { return fightManager; }
+    public LevelManager getLevelManager() { return levelManager; }
 
     public File getDirectory(){
         File directory = new File(getServer().getWorldContainer(), "plugins/Noobland");

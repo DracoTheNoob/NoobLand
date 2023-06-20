@@ -22,18 +22,14 @@ public class EconomyManager {
 
     private final HashMap<UUID, Wallet> wallets;
     private final Plugin plugin;
-    private final File directory;
 
     public EconomyManager(Plugin plugin){
         this.wallets = new HashMap<>();
         this.plugin = plugin;
-        this.directory = new File(plugin.getDirectory(), "economy");
-        if(!this.directory.exists() && !this.directory.mkdir())
-            throw new RuntimeException("Unable to create economy manager folder at '" + directory.getPath() + "'");
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            wallets.put(player.getUniqueId(), new Wallet(directory, player.getUniqueId()));
-            wallets.get(player.getUniqueId()).save(directory);
+            wallets.put(player.getUniqueId(), new Wallet(plugin.getDbConnection(), player.getUniqueId()));
+            wallets.get(player.getUniqueId()).save(plugin.getDbConnection());
             updateTabList(player.getUniqueId());
         }
     }
@@ -47,8 +43,8 @@ public class EconomyManager {
     }
 
     public void register(UUID owner){
-        Wallet wallet = new Wallet(directory, owner);
-        wallet.save(directory);
+        Wallet wallet = new Wallet(plugin.getDbConnection(), owner);
+        wallet.save(plugin.getDbConnection());
         wallets.put(owner, wallet);
     }
     public void logout(UUID owner){ wallets.remove(owner); }
@@ -68,7 +64,7 @@ public class EconomyManager {
 
         if(payer == null){
             payedWallet.add(amount);
-            payedWallet.save(directory);
+            payedWallet.save(plugin.getDbConnection());
 
             updateTabList(payed);
             return true;
@@ -82,8 +78,8 @@ public class EconomyManager {
         payerWallet.subtract(amount);
         payedWallet.add(amount);
 
-        payerWallet.save(directory);
-        payedWallet.save(directory);
+        payerWallet.save(plugin.getDbConnection());
+        payedWallet.save(plugin.getDbConnection());
 
         updateTabList(payer);
         updateTabList(payed);
@@ -94,7 +90,7 @@ public class EconomyManager {
     public void add(UUID owner, double amount){
         Wallet wallet = wallets.get(owner);
         wallet.add(amount);
-        wallet.save(directory);
+        wallet.save(plugin.getDbConnection());
 
         updateTabList(wallet.getOwner());
     }
@@ -102,7 +98,7 @@ public class EconomyManager {
     public void subtract(UUID owner, double amount){
         Wallet wallet = wallets.get(owner);
         wallet.subtract(amount);
-        wallet.save(directory);
+        wallet.save(plugin.getDbConnection());
 
         updateTabList(wallet.getOwner());
     }

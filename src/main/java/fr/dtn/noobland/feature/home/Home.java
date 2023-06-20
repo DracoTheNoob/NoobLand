@@ -11,6 +11,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,47 +31,57 @@ public class Home {
         this.location = location;
     }
 
-    public Home(Player owner, String name){ this(owner.getUniqueId(), name, owner.getLocation()); }
-
-    public Home(File directory, UUID owner, String name){
-        File file = getFile(directory, owner, name);
-        YamlConfiguration home = YamlConfiguration.loadConfiguration(file);
-
-        World world = Bukkit.getWorld(Objects.requireNonNull(home.getString("world")));
-        double x = home.getDouble("x");
-        double y = home.getDouble("y");
-        double z = home.getDouble("z");
-        float yaw = (float) home.getDouble("yaw");
-        float pitch = (float) home.getDouble("pitch");
-
+    public Home(Connection connection, UUID owner, String name){
         this.owner = owner;
         this.name = name;
-        this.location = new Location(world, x, y, z, yaw, pitch);
-    }
-
-    public void save(File directory){
-        File file = getFile(directory, owner, name);
-        YamlConfiguration home = YamlConfiguration.loadConfiguration(file);
-
-        home.set("world", Objects.requireNonNull(location.getWorld()).getName());
-        home.set("x", location.getX());
-        home.set("y", location.getY());
-        home.set("z", location.getZ());
-        home.set("yaw", location.getYaw());
-        home.set("pitch", location.getPitch());
 
         try {
-            home.save(file);
-        } catch (IOException e) {
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM homes WHERE id = ?");
+            query.setString(1, owner + "/" + name);
+            ResultSet set = query.executeQuery();
+
+            if(!set.next())
+                throw new IllegalArgumentException();
+
+            World world = Objects.requireNonNull(Bukkit.getWorld(UUID.fromString(set.getString("world"))));
+            double x = set.getDouble("x");
+            double y = set.getDouble("y");
+            double z = set.getDouble("z");
+            float yaw = set.getFloat("yaw");
+            float pitch = set.getFloat("pitch");
+
+            this.location = new Location(world, x, y, z, yaw, pitch);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void delete(File directory){
-        File home = getFile(directory, owner, name);
+    public void save(Connection connection){
+        try{
+            delete(connection);
 
-        if(!home.delete())
-            throw new RuntimeException("Unable to delete home file '" + home.getPath() + "'");
+            PreparedStatement query = connection.prepareStatement("INSERT INTO homes VALUES (?, ?, ?, ?, ?, ?, ?)");
+            query.setString(1, owner + "/" + name);
+            query.setString(2, Objects.requireNonNull(location.getWorld()).getUID().toString());
+            query.setDouble(3, location.getX());
+            query.setDouble(4, location.getY());
+            query.setDouble(5, location.getZ());
+            query.setFloat(6, location.getYaw());
+            query.setFloat(7, location.getPitch());
+            query.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(Connection connection){
+        try{
+            PreparedStatement query = connection.prepareStatement("DELETE FROM homes WHERE id = ?");
+            query.setString(1, owner + "/" + name);
+            query.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public ItemStack getIcon(){

@@ -5,22 +5,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 
-import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class HomeManager {
     public static final List<String> acceptedChars = List.of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
 
-    private final File directory;
+    private final Plugin plugin;
 
     public HomeManager(Plugin plugin) {
-        this.directory = new File(plugin.getDirectory(), "homes");
-
-        if (!directory.exists() && !directory.mkdir())
-            throw new RuntimeException("Unable to create homes directory '" + directory.getPath() + "'");
+        this.plugin = plugin;
     }
 
     public boolean createHome(UUID owner, String name, Location location) {
@@ -28,7 +27,7 @@ public class HomeManager {
             return false;
 
         Home home = new Home(owner, name, location);
-        home.save(directory);
+        home.save(plugin.getDbConnection());
         return true;
     }
 
@@ -36,24 +35,24 @@ public class HomeManager {
         if (!exists(owner, name))
             return null;
 
-        return new Home(directory, owner, name);
+        return new Home(plugin.getDbConnection(), owner, name);
     }
 
     public boolean deleteHome(UUID owner, String name) {
         try {
-            Home home = new Home(directory, owner, name);
-            home.delete(directory);
+            Home home = new Home(plugin.getDbConnection(), owner, name);
+            home.delete(plugin.getDbConnection());
             return true;
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
 
     public boolean exists(UUID owner, String name) {
         try {
-            new Home(directory, owner, name);
+            new Home(plugin.getDbConnection(), owner, name);
             return true;
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
@@ -61,9 +60,17 @@ public class HomeManager {
     public List<String> listHomesName(UUID owner) {
         List<String> homes = new ArrayList<>();
 
-        for (String path : Objects.requireNonNull(this.directory.list()))
-            if (path.startsWith(owner.toString()))
-                homes.add(path.substring(path.lastIndexOf('_') + 1, path.lastIndexOf('.')));
+        try{
+            Connection connection = plugin.getDbConnection();
+            PreparedStatement query = connection.prepareStatement("SELECT id FROM homes WHERE id LIKE ?");
+            query.setString(1, owner.toString() + "%");
+            ResultSet set = query.executeQuery();
+
+            while(set.next())
+                homes.add(set.getString("id").substring(set.getString("id").lastIndexOf('/')+1));
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
 
         return homes;
     }
