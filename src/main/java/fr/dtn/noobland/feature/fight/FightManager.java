@@ -1,17 +1,17 @@
 package fr.dtn.noobland.feature.fight;
 
 import fr.dtn.noobland.Plugin;
+import fr.dtn.noobland.feature.Manager;
 import org.bukkit.Bukkit;
 
 import java.util.*;
 
-public class FightManager {
-    private final Plugin plugin;
+public class FightManager extends Manager {
     private final List<UUID> fights;
     private final HashMap<UUID, Integer> timers;
 
     public FightManager(Plugin plugin){
-        this.plugin = plugin;
+        super(plugin);
         this.fights = new ArrayList<>();
         this.timers = new HashMap<>();
     }

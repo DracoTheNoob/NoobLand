@@ -1,6 +1,7 @@
 package fr.dtn.noobland.feature.home;
 
 import fr.dtn.noobland.Plugin;
+import fr.dtn.noobland.feature.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
@@ -13,14 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class HomeManager {
+public class HomeManager extends Manager {
     public static final List<String> acceptedChars = List.of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
 
-    private final Plugin plugin;
-
-    public HomeManager(Plugin plugin) {
-        this.plugin = plugin;
-    }
+    public HomeManager(Plugin plugin) { super(plugin); }
 
     public boolean createHome(UUID owner, String name, Location location) {
         if (!canCreateHome(owner))

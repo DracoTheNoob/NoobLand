@@ -1,4 +1,4 @@
-package fr.dtn.noobland.commands.ranks;
+package fr.dtn.noobland.commands;
 
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.command.CommandExecutor;

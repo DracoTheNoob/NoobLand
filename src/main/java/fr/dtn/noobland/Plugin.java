@@ -6,11 +6,12 @@ import fr.dtn.noobland.command.TabCompleter;
 import fr.dtn.noobland.commands.CommandSpawn;
 import fr.dtn.noobland.commands.economy.CommandMarket;
 import fr.dtn.noobland.commands.economy.CommandPay;
+import fr.dtn.noobland.commands.filter.CommandFilter;
 import fr.dtn.noobland.commands.home.CommandDeleteHome;
 import fr.dtn.noobland.commands.home.CommandHome;
 import fr.dtn.noobland.commands.home.CommandHomes;
 import fr.dtn.noobland.commands.home.CommandSetHome;
-import fr.dtn.noobland.commands.ranks.CommandRank;
+import fr.dtn.noobland.commands.CommandRank;
 import fr.dtn.noobland.db.Database;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
@@ -18,14 +19,12 @@ import fr.dtn.noobland.feature.home.HomeManager;
 import fr.dtn.noobland.feature.experience.ExperienceManager;
 import fr.dtn.noobland.feature.rank.Rank;
 import fr.dtn.noobland.feature.rank.RankManager;
+import fr.dtn.noobland.feature.inventory.FilterManager;
 import fr.dtn.noobland.listener.Listener;
 import fr.dtn.noobland.listener.block.BlockPlaceListener;
 import fr.dtn.noobland.listener.block.BlockBreakListener;
-import fr.dtn.noobland.listener.entity.EntityDamageByEntityListener;
+import fr.dtn.noobland.listener.entity.*;
 import fr.dtn.noobland.listener.player.*;
-import fr.dtn.noobland.listener.entity.EntityDamageListener;
-import fr.dtn.noobland.listener.entity.EntityDeathListener;
-import fr.dtn.noobland.listener.entity.EntitySpawnListener;
 import fr.dtn.noobland.listener.ui.InventoryClickListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -49,6 +48,7 @@ public class Plugin extends JavaPlugin{
     private FightManager fightManager;
     private ExperienceManager experienceManager;
     private ScoreBoardManager scoreboardManager;
+    private FilterManager filterManager;
 
     @Override
     public void onLoad() {
@@ -70,12 +70,14 @@ public class Plugin extends JavaPlugin{
         this.fightManager = new FightManager(this);
         this.experienceManager = new ExperienceManager(this);
         this.scoreboardManager = new ScoreBoardManager(this);
+        this.filterManager = new FilterManager(this);
 
         registerCommands(
                 CommandSpawn.class,
                 CommandSetHome.class, CommandDeleteHome.class, CommandHome.class, CommandHomes.class,
                 CommandPay.class, CommandMarket.class,
-                CommandRank.class
+                CommandRank.class,
+                CommandFilter.class
         );
 
         economyManager.getShopUI(0);
@@ -89,6 +91,7 @@ public class Plugin extends JavaPlugin{
                 PlayerJoinListener.class, PlayerQuitListener.class, PlayerChatListener.class, PlayerDeathListener.class,
                 InventoryClickListener.class,
                 EntitySpawnListener.class, EntityDeathListener.class, EntityDamageListener.class, EntityDamageByEntityListener.class,
+                EntityPickupItemListener.class,
                 BlockPlaceListener.class, BlockBreakListener.class
         );
 
@@ -110,6 +113,7 @@ public class Plugin extends JavaPlugin{
     public FightManager getFightManager() { return fightManager; }
     public ExperienceManager getExperienceManager() { return experienceManager; }
     public ScoreBoardManager getScoreboardManager() { return scoreboardManager; }
+    public FilterManager getFilterManager() { return filterManager; }
 
     public void updateTabList(Player player){
         Rank rank = rankManager.getRank(player.getUniqueId());

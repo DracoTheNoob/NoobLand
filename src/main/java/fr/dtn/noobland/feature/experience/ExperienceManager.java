@@ -2,6 +2,7 @@ package fr.dtn.noobland.feature.experience;
 
 import fr.dtn.noobland.MessageManager;
 import fr.dtn.noobland.Plugin;
+import fr.dtn.noobland.feature.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ExperienceManager {
+public class ExperienceManager extends Manager{
     private static final PotionEffect[] effects;
 
     static{
@@ -32,9 +33,7 @@ public class ExperienceManager {
 
     private static PotionEffect effect(PotionEffectType type, int amplifier){ return new PotionEffect(type, -1, amplifier, true, false); }
 
-    private final Plugin plugin;
-
-    public ExperienceManager(Plugin plugin){ this.plugin = plugin; }
+    public ExperienceManager(Plugin plugin){ super(plugin); }
 
     private PlayerLevel getPlayer(UUID player){ return new PlayerLevel(plugin.getDbConnection(), player); }
 

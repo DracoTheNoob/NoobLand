@@ -41,6 +41,8 @@ public class Database {
                     .execute();
             c.prepareStatement("CREATE TABLE IF NOT EXISTS market(id INT PRIMARY KEY, material VARCHAR(56), price DOUBLE)")
                     .execute();
+            c.prepareStatement("CREATE TABLE IF NOT EXISTS filters(id VARCHAR(36), filter VARCHAR(64))")
+                    .execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

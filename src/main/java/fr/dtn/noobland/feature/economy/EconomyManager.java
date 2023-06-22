@@ -1,10 +1,10 @@
 package fr.dtn.noobland.feature.economy;
 
 import fr.dtn.noobland.Plugin;
+import fr.dtn.noobland.feature.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class EconomyManager {
+public class EconomyManager extends Manager {
     private static final HashMap<EntityType, Double> prices;
     private static final ItemStack previousPage;
     private static final ItemStack nextPage;
@@ -43,11 +43,7 @@ public class EconomyManager {
         nextPage.setItemMeta(nextMeta);
     }
 
-    private final Plugin plugin;
-
-    public EconomyManager(Plugin plugin){
-        this.plugin = plugin;
-    }
+    public EconomyManager(Plugin plugin){ super(plugin); }
 
     public double getPriceOf(EntityType type, int level){
         if(prices.get(type) == null)
