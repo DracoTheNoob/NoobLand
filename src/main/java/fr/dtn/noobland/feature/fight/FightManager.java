@@ -7,42 +7,34 @@ import java.util.*;
 
 public class FightManager {
     private final Plugin plugin;
-    private final HashMap<UUID, List<UUID>> fights;
+    private final List<UUID> fights;
     private final HashMap<UUID, Integer> timers;
 
     public FightManager(Plugin plugin){
         this.plugin = plugin;
-        this.fights = new HashMap<>();
+        this.fights = new ArrayList<>();
         this.timers = new HashMap<>();
     }
 
-    public void onEnable(){
-        Bukkit.getScheduler().runTaskTimer(plugin, new FightTimer(this), 20, 20);
+    public void onEnable(){ Bukkit.getScheduler().runTaskTimer(plugin, new FightTimer(plugin, this), 20, 20); }
+
+    public void addEntity(UUID id){
+        if(!fights.contains(id))
+            fights.add(id);
+
+        if(timers.containsKey(id))
+            timers.replace(id, 30);
+        else
+            timers.put(id, 30);
     }
 
-    public void addEnemy(UUID player, UUID enemy){
-        if(!fights.containsKey(player))
-            fights.put(player, new ArrayList<>());
-
-        fights.get(player).remove(enemy);
-        fights.get(player).add(enemy);
-
-        timers.remove(player);
-        timers.put(player, 30);
+    public void removeEntity(UUID id){
+        fights.remove(id);
+        plugin.getScoreboardManager().updateScoreboard(id);
     }
 
-    public void clearPlayer(UUID player){
-        fights.remove(player);
-        Objects.requireNonNull(Bukkit.getPlayer(player)).sendMessage(plugin.getMessageManager().get("fight.end"));
-    }
-    public void clearEnemy(UUID enemy){ fights.keySet().removeIf(enemy::equals); }
-
-    public boolean isInFight(UUID player){
-        if(!fights.containsKey(player))
-            return false;
-
-        return fights.get(player).size() > 0;
-    }
+    public boolean isInFight(UUID id){ return fights.contains(id); }
+    public int getRemainingTime(UUID id){ return timers.getOrDefault(id, -1); }
 
     public HashMap<UUID, Integer> getTimers(){ return timers; }
 }

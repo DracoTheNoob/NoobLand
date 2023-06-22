@@ -50,8 +50,8 @@ public class CustomZombie extends CustomEntity<Zombie>{
 
         zombie.getEquipment().clear();
 
-        int min = level / 5;
-        for(int i = 0; i < random.nextInt(min, 5); i++){
+        int min = level / 4;
+        for(int i = 0; i < (min == 5 ? 5 : random.nextInt(min, 5)); i++){
             Material material = stuff[random.nextInt(Math.max(0, level - 8), level + 3)];
             ItemStack item = new ItemStack(material);
 
@@ -72,5 +72,5 @@ public class CustomZombie extends CustomEntity<Zombie>{
 
     @Override protected double calculateHealth(int level) { return (int)Math.pow(level - 1, 1.65) + 1; }
     @Override protected double calculateAttack(int level) { return (int)Math.pow(level - 1, 1.03) + 1; }
-    @Override protected double calculateSpeed(int level) { return 0.1 + level * 0.01; }
+    @Override protected double calculateSpeed(int level) { return 0.15 + 0.01 * level; }
 }

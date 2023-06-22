@@ -3,6 +3,7 @@ package fr.dtn.noobland;
 import fr.dtn.noobland.command.Command;
 import fr.dtn.noobland.command.PluginCommand;
 import fr.dtn.noobland.commands.CommandSpawn;
+import fr.dtn.noobland.commands.economy.CommandMarket;
 import fr.dtn.noobland.commands.economy.CommandPay;
 import fr.dtn.noobland.commands.home.CommandDeleteHome;
 import fr.dtn.noobland.commands.home.CommandHome;
@@ -13,20 +14,23 @@ import fr.dtn.noobland.db.Database;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
 import fr.dtn.noobland.feature.home.HomeManager;
-import fr.dtn.noobland.feature.levels.LevelManager;
+import fr.dtn.noobland.feature.levels.ExperienceManager;
+import fr.dtn.noobland.feature.rank.Rank;
 import fr.dtn.noobland.feature.rank.RankManager;
 import fr.dtn.noobland.listener.Listener;
-import fr.dtn.noobland.listener.economy.EntityDamageByEntityListener;
-import fr.dtn.noobland.listener.minor.PlayerChatListener;
-import fr.dtn.noobland.listener.minor.PlayerDeathListener;
-import fr.dtn.noobland.listener.minor.PlayerJoinListener;
-import fr.dtn.noobland.listener.minor.PlayerQuitListener;
-import fr.dtn.noobland.listener.mob.EntityDamageListener;
-import fr.dtn.noobland.listener.mob.EntityDeathListener;
-import fr.dtn.noobland.listener.mob.EntitySpawnListener;
+import fr.dtn.noobland.listener.block.BlockPlaceListener;
+import fr.dtn.noobland.listener.block.BlockBreakListener;
+import fr.dtn.noobland.listener.entity.EntityDamageByEntityListener;
+import fr.dtn.noobland.listener.player.*;
+import fr.dtn.noobland.listener.entity.EntityDamageListener;
+import fr.dtn.noobland.listener.entity.EntityDeathListener;
+import fr.dtn.noobland.listener.entity.EntitySpawnListener;
 import fr.dtn.noobland.listener.ui.InventoryClickListener;
+import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +46,8 @@ public class Plugin extends JavaPlugin{
     private RankManager rankManager;
     private EconomyManager economyManager;
     private FightManager fightManager;
-    private LevelManager levelManager;
+    private ExperienceManager experienceManager;
+    private ScoreBoardManager scoreboardManager;
 
     @Override
     public void onLoad() {
@@ -62,14 +67,17 @@ public class Plugin extends JavaPlugin{
         this.rankManager = new RankManager(this);
         this.economyManager = new EconomyManager(this);
         this.fightManager = new FightManager(this);
-        this.levelManager = new LevelManager(this);
+        this.experienceManager = new ExperienceManager(this);
+        this.scoreboardManager = new ScoreBoardManager(this);
 
         registerCommands(
                 CommandSpawn.class,
                 CommandSetHome.class, CommandDeleteHome.class, CommandHome.class, CommandHomes.class,
-                CommandPay.class,
+                CommandPay.class, CommandMarket.class,
                 CommandRank.class
         );
+
+        economyManager.getShopUI(0);
     }
 
     @Override
@@ -79,9 +87,13 @@ public class Plugin extends JavaPlugin{
         registerListeners(
                 PlayerJoinListener.class, PlayerQuitListener.class, PlayerChatListener.class, PlayerDeathListener.class,
                 InventoryClickListener.class,
-                EntitySpawnListener.class, EntityDeathListener.class, EntityDamageListener.class,
-                EntityDamageByEntityListener.class
+                EntitySpawnListener.class, EntityDeathListener.class, EntityDamageListener.class, EntityDamageByEntityListener.class,
+                BlockPlaceListener.class, BlockBreakListener.class
         );
+
+        Bukkit.getServer().getWorlds().forEach(world -> {
+            world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        });
     }
 
     @Override
@@ -89,14 +101,23 @@ public class Plugin extends JavaPlugin{
         this.database.close();
     }
 
-    public Database getDatabase() { return database; }
     public Connection getDbConnection() { return database.getConnection(); }
     public MessageManager getMessageManager() { return messageManager; }
     public HomeManager getHomeManager() { return homeManager; }
     public RankManager getRankManager() { return rankManager; }
     public EconomyManager getEconomyManager() { return economyManager; }
     public FightManager getFightManager() { return fightManager; }
-    public LevelManager getLevelManager() { return levelManager; }
+    public ExperienceManager getExperienceManager() { return experienceManager; }
+    public ScoreBoardManager getScoreboardManager() { return scoreboardManager; }
+
+    public void updateTabList(Player player){
+        Rank rank = rankManager.getRank(player.getUniqueId());
+        int level = experienceManager.getLevel(player.getUniqueId());
+
+        player.setPlayerListHeader("§6Noob Land\n");
+        player.setPlayerListName(" " + rank.getDisplay() + " §c" + level + "§7 - §6" + player.getDisplayName() + " ");
+        player.setPlayerListFooter("\n§c" + Bukkit.getOnlinePlayers().size() + " §7/ §c" + Bukkit.getMaxPlayers());
+    }
 
     public File getDirectory(){
         File directory = new File(getServer().getWorldContainer(), "plugins/Noobland");
@@ -131,8 +152,6 @@ public class Plugin extends JavaPlugin{
 
     @SafeVarargs
     final void registerListeners(@NotNull Class<? extends Listener>... classes){
-        CraftServer server = (CraftServer) getServer();
-
         for(Class<? extends Listener> c : classes){
             try{
                 Listener listener = c.getConstructor(Plugin.class).newInstance(this);

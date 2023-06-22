@@ -61,5 +61,5 @@ public class CustomWolf extends CustomEntity<Wolf>{
 
     @Override protected double calculateHealth(int level) { return (int)(Math.pow(1.25, level-1) + level); }
     @Override protected double calculateAttack(int level) { return (int)(Math.pow(1.18, level-1) + level / 2.0); }
-    @Override protected double calculateSpeed(int level) { return 0.3 + level * 0.01; }
+    @Override protected double calculateSpeed(int level) { return 0.2 + 0.01 * level; }
 }

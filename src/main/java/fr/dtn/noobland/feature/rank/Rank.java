@@ -3,17 +3,19 @@ package fr.dtn.noobland.feature.rank;
 public class Rank {
     private final String id;
     private final String display;
+    private final String simpleDisplay;
     private final int importance;
 
     private static final Rank[] ranks = {
-            new Rank("administrator", "§7[§cAdministrateur§7]", 10),
-            new Rank("developer", "§7[§aDéveloppeur§7]", 8),
-            new Rank("player", "§7[§eJoueur§7]", 1)
+            new Rank("administrator", "§cAdministrateur", 10),
+            new Rank("developer", "§aDéveloppeur", 8),
+            new Rank("player", "§eJoueur§", 1)
     };
 
-    private Rank(String id, String display, int importance){
+    private Rank(String id, String simpleDisplay, int importance){
         this.id = id;
-        this.display = display;
+        this.simpleDisplay = simpleDisplay;
+        this.display = "§7[" + simpleDisplay + "§7]";
         this.importance = importance;
     }
 
@@ -22,17 +24,20 @@ public class Rank {
 
         for(Rank rank : ranks) {
             if (rank.getId().equals(id)) {
+                this.simpleDisplay = rank.getSimpleDisplay();
                 this.display = rank.getDisplay();
                 this.importance = rank.getImportance();
                 return;
             }
         }
 
+        this.simpleDisplay = null;
         this.display = null;
         this.importance = 0;
     }
 
     public String getId() { return id; }
+    public String getSimpleDisplay() { return simpleDisplay; }
     public String getDisplay() { return display; }
     public int getImportance() { return importance; }
 }

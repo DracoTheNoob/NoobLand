@@ -3,7 +3,6 @@ package fr.dtn.noobland.commands.ranks;
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.command.CommandExecutor;
 import fr.dtn.noobland.command.PluginCommand;
-import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.rank.Rank;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -43,12 +42,9 @@ public class CommandRank extends CommandExecutor{
             return true;
         }
 
-        EconomyManager economy = plugin.getEconomyManager();
-
         plugin.getRankManager().setRank(player.getUniqueId(), rank);
         sender.sendMessage(message.get("rank.set_origin"));
         player.sendMessage(message.get("rank.set_target").replace("%rank%", rank.getDisplay().replace("[", "").replace("]", "")));
-        player.setPlayerListName(rank.getDisplay() + "§6" + player.getDisplayName() + "§7 - §6" + (int)economy.getBalance(player.getUniqueId()) + " $");
         return true;
     }
 }

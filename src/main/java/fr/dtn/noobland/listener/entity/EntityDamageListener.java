@@ -1,4 +1,4 @@
-package fr.dtn.noobland.listener.mob;
+package fr.dtn.noobland.listener.entity;
 
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.listener.Listener;

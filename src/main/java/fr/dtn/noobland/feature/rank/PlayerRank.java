@@ -9,12 +9,7 @@ import java.util.UUID;
 
 public class PlayerRank {
     private final UUID owner;
-    private final Rank rank;
-
-    public PlayerRank(UUID owner, Rank rank){
-        this.owner = owner;
-        this.rank = rank;
-    }
+    private Rank rank;
 
     public PlayerRank(Connection connection, UUID owner){
         this.owner = owner;
@@ -26,8 +21,11 @@ public class PlayerRank {
             query.setString(1, owner.toString());
             ResultSet set = query.executeQuery();
 
-            if(!set.next())
-                throw new IllegalArgumentException();
+            if(!set.next()){
+                this.rank = new Rank("player");
+                this.save(connection);
+                return;
+            }
 
             id = set.getString("player_rank");
         }catch(SQLException e){
@@ -35,6 +33,7 @@ public class PlayerRank {
         }
 
         this.rank = new Rank(id);
+        this.save(connection);
     }
 
     public void save(Connection connection){
@@ -56,7 +55,10 @@ public class PlayerRank {
         query.execute();
     }
 
-    public Rank getRank(){ return rank; }
+    public void setRank(Connection connection, Rank rank){
+        this.rank = rank;
+        this.save(connection);
+    }
 
-    private static File getFile(File directory, UUID owner){ return new File(directory, owner.toString() + ".rank"); }
+    public Rank getRank(){ return rank; }
 }

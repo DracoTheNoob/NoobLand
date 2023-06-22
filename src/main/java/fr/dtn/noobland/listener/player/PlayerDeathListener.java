@@ -1,8 +1,9 @@
-package fr.dtn.noobland.listener.minor;
+package fr.dtn.noobland.listener.player;
 
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.listener.Listener;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -16,24 +17,29 @@ public class PlayerDeathListener extends Listener{
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
-        Player player = event.getEntity();
+        event.getDrops().clear();
+        event.setDroppedExp(0);
+        event.setDeathMessage("");
 
+        Player player = event.getEntity();
+        player.setGameMode(GameMode.SPECTATOR);
+
+        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
         player.getInventory().forEach(item -> {
             if(item != null && item.getType() != Material.AIR)
                 player.getWorld().dropItem(player.getLocation(), item);
         });
 
-        player.setLevel(Math.max(0, player.getLevel() - 5));
-        player.setExp(0);
-        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
         player.teleport(Objects.requireNonNull(plugin.getServer().getWorld("world")).getSpawnLocation());
+        player.setGameMode(GameMode.SURVIVAL);
+
+        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         player.getInventory().clear();
-        
-        event.setKeepLevel(true);
-        event.getDrops().clear();
+        player.setFoodLevel(20);
+        player.setExp(0);
+        player.setLevel(0);
 
-        plugin.getFightManager().clearPlayer(player.getUniqueId());
-
+        plugin.getFightManager().removeEntity(player.getUniqueId());
         Player killer = player.getKiller();
         if(killer == null)
             return;

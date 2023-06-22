@@ -37,6 +37,10 @@ public class Database {
                     .execute();
             c.prepareStatement("CREATE TABLE IF NOT EXISTS levels(id VARCHAR(36) PRIMARY KEY, level INT, experience FLOAT)")
                     .execute();
+            c.prepareStatement("CREATE TABLE IF NOT EXISTS placed_blocks(world VARCHAR(36), x INT, y INT, z INT)")
+                    .execute();
+            c.prepareStatement("CREATE TABLE IF NOT EXISTS market(id INT PRIMARY KEY, material VARCHAR(56), price DOUBLE)")
+                    .execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

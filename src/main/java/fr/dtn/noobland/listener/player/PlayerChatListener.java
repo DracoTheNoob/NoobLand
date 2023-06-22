@@ -1,4 +1,4 @@
-package fr.dtn.noobland.listener.minor;
+package fr.dtn.noobland.listener.player;
 
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.feature.rank.Rank;
@@ -18,6 +18,6 @@ public class PlayerChatListener extends Listener{
         Player player = event.getPlayer();
         Rank rank = manager.getRank(player.getUniqueId());
         event.setCancelled(true);
-        Bukkit.broadcastMessage(rank.getDisplay().substring(0, rank.getDisplay().lastIndexOf(" ")-1) + "[§6" + player.getDisplayName() + "§7]: §f" + event.getMessage());
+        Bukkit.broadcastMessage(rank.getDisplay() + "§7[§6" + player.getDisplayName() + "§7]: §f" + event.getMessage());
     }
 }

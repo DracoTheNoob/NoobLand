@@ -1,5 +1,7 @@
 package fr.dtn.noobland.feature.levels;
 
+import org.bukkit.Bukkit;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ public class PlayerLevel {
         this.player = player;
 
         try{
-            PreparedStatement query = connection.prepareStatement("SELECT level,xp FROM levels WHERE id = ?");
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM levels WHERE id = ?");
             query.setString(1, player.toString());
             ResultSet set = query.executeQuery();
 
@@ -54,7 +56,7 @@ public class PlayerLevel {
     }
 
     public int addExperience(Connection connection, float experience){
-        this.experience = experience;
+        this.experience += experience;
 
         int levels = 0;
         while(this.experience >= getExperienceFor(level+1)){
@@ -63,6 +65,7 @@ public class PlayerLevel {
             levels++;
         }
 
+        this.experience = (int)(1000 * this.experience) / 1000f;
         save(connection);
         return levels;
     }

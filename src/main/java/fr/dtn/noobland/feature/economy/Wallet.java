@@ -21,11 +21,13 @@ public class Wallet {
             if(set.next()){
                 this.balance = set.getDouble("balance");
             }else{
-                this.balance = 0;
+                this.balance = 100;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        this.save(connection);
     }
 
     public void save(Connection connection){
@@ -47,13 +49,15 @@ public class Wallet {
         query.execute();
     }
 
-    public void add(double money){
+    public void add(Connection connection, double money){
         this.balance += money;
         this.balance = (int)(balance * 1000) / 1000.0;
+        this.save(connection);
     }
-    public void subtract(double money){
+    public void subtract(Connection connection, double money){
         this.balance -= money;
         this.balance = (int)(balance * 1000) / 1000.0;
+        this.save(connection);
     }
     public double getBalance(){ return balance; }
     public UUID getOwner() { return owner; }

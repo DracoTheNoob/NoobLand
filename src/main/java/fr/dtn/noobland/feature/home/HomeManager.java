@@ -26,8 +26,8 @@ public class HomeManager {
         if (!canCreateHome(owner))
             return false;
 
-        Home home = new Home(owner, name, location);
-        home.save(plugin.getDbConnection());
+        new Home(plugin.getDbConnection(), owner, name, location);
+        plugin.getScoreboardManager().updateScoreboard(owner);
         return true;
     }
 
@@ -40,8 +40,8 @@ public class HomeManager {
 
     public boolean deleteHome(UUID owner, String name) {
         try {
-            Home home = new Home(plugin.getDbConnection(), owner, name);
-            home.delete(plugin.getDbConnection());
+            new Home(plugin.getDbConnection(), owner, name).delete(plugin.getDbConnection());
+            plugin.getScoreboardManager().updateScoreboard(owner);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -79,8 +79,8 @@ public class HomeManager {
         return listHomesName(owner).size() < 8;
     }
 
-    public Inventory getUi(UUID owner) {
-        Inventory ui = Bukkit.createInventory(null, 45, "Choix du home");
+    public Inventory getHomesUI(UUID owner) {
+        Inventory ui = Bukkit.createInventory(null, 45, "§cChoix du home");
         List<String> homes = listHomesName(owner);
 
         if (homes.size() == 0)

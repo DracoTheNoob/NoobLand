@@ -4,16 +4,13 @@ import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.command.CommandExecutor;
 import fr.dtn.noobland.command.PluginCommand;
 import fr.dtn.noobland.completers.HomesCompleter;
-import fr.dtn.noobland.feature.home.Home;
 import fr.dtn.noobland.feature.home.HomeManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.UUID;
 
 @PluginCommand(name = "home", description = "Teleport the player to the specified home", completer = HomesCompleter.class)
@@ -31,7 +28,7 @@ public class CommandHome extends CommandExecutor {
         UUID owner = player.getUniqueId();
 
         if(args.length == 0){
-            Inventory ui = manager.getUi(owner);
+            Inventory ui = manager.getHomesUI(owner);
 
             if(ui == null){
                 player.sendMessage(message.get("home.empty_list"));

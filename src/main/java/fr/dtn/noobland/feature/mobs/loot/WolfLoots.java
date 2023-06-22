@@ -5,26 +5,18 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class WolfLoots implements Loots{
+public class WolfLoots extends CustomLoots{
+    public WolfLoots() { super(Material.WOLF_SPAWN_EGG); }
+
     @Override
-    public ItemStack[] getLoots(LivingEntity entity, int level){
-        List<ItemStack> loots = new ArrayList<>();
+    protected HashMap<Material, Integer> generateLoots(HashMap<Material, Integer> loots, int level) {
+        loots.put(Material.BONE, getAmount(level, 4));
+        loots.put(Material.MUTTON, getAmount(level, 6));
 
-        Random random = new Random();
-        int leather = random.nextInt(0, level/4+1);
-        int bone = random.nextInt(0, level/6+1);
-        int mutton = random.nextInt(0, level/8+1);
-
-        if(leather != 0)
-            loots.add(new ItemStack(Material.LEATHER, leather));
-        if(bone != 0)
-            loots.add(new ItemStack(Material.BONE, bone));
-        if(mutton != 0)
-            loots.add(new ItemStack(entity.getFireTicks() != 0 ? Material.COOKED_MUTTON : Material.MUTTON, mutton));
-
-        return loots.toArray(new ItemStack[0]);
+        return loots;
     }
 }

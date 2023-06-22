@@ -25,10 +25,12 @@ public class Home {
     private final String name;
     private final Location location;
 
-    public Home(UUID owner, String name, Location location){
+    public Home(Connection connection, UUID owner, String name, Location location){
         this.owner = owner;
         this.name = name;
         this.location = location;
+
+        this.save(connection);
     }
 
     public Home(Connection connection, UUID owner, String name){

@@ -1,5 +1,7 @@
 package fr.dtn.noobland.feature.mobs;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
@@ -48,6 +50,11 @@ public abstract class CustomEntity<E extends LivingEntity> {
         String name = "§6" + entity.getName().replaceFirst(first, first.toUpperCase()) + " §7[lvl. §c" + level + "§7] " + (int)getHealth() + "§4❤";
         entity.setCustomName(name);
         entity.setCustomNameVisible(true);
+
+        if(level > 16){
+            Location l = entity.getLocation();
+            Bukkit.broadcastMessage(entity.getCustomName() + "§9 est apparu en §c" + l.getX() + "§9,§c" + l.getY() + "§9,§c" + l.getZ() + "§9 !");
+        }
     }
 
     public abstract void init();

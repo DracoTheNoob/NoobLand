@@ -43,6 +43,11 @@ public class CommandPay extends CommandExecutor {
         EconomyManager manager = plugin.getEconomyManager();
 
         if(sender instanceof Player payer){
+            if(payed.getName().equals(payer.getName())){
+                payer.sendMessage(message.get("economy.self"));
+                return true;
+            }
+
             if(!manager.pay(payer.getUniqueId(), payed.getUniqueId(), money)){
                 payer.sendMessage(message.get("economy.exceed"));
                 return true;

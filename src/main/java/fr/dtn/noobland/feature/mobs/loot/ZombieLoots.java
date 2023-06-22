@@ -1,31 +1,19 @@
 package fr.dtn.noobland.feature.mobs.loot;
 
+import fr.dtn.noobland.feature.mobs.loot.CustomLoots;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.HashMap;
 
-public class ZombieLoots implements Loots{
+public class ZombieLoots extends CustomLoots{
+    public ZombieLoots(){ super(Material.ZOMBIE_SPAWN_EGG); }
+
     @Override
-    public ItemStack[] getLoots(LivingEntity entity, int level) {
-        List<ItemStack> loots = new ArrayList<>();
+    protected HashMap<Material, Integer> generateLoots(HashMap<Material, Integer> loots, int level) {
+        loots.put(Material.ROTTEN_FLESH, getAtLeastAmount(level, 2));
+        loots.put(Material.POTATO, getAtLeastAmount(level, 6));
+        loots.put(Material.IRON_INGOT, getAtLeastAmount(level, 8));
 
-        Random random = new Random();
-
-        int rottenFlesh = random.nextInt(0, level/2+1);
-        int potatoes = random.nextInt(0, level/6 + (level < 6 ? 1 : 0));
-        int ingots = random.nextInt(0, level/8 + (level < 8 ? 1 : 0));
-
-        if(rottenFlesh != 0)
-            loots.add(new ItemStack(Material.ROTTEN_FLESH, rottenFlesh));
-        if(potatoes != 0 && level >= 6)
-            loots.add(new ItemStack(Material.POTATO, potatoes));
-        if(ingots != 0 && level >= 8)
-            loots.add(new ItemStack(Material.IRON_INGOT, ingots));
-
-        return loots.toArray(new ItemStack[0]);
+        return loots;
     }
 }

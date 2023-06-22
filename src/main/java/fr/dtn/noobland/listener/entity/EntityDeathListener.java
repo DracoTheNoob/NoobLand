@@ -1,11 +1,13 @@
-package fr.dtn.noobland.listener.mob;
+package fr.dtn.noobland.listener.entity;
 
 import fr.dtn.noobland.Plugin;
+import fr.dtn.noobland.feature.mobs.loot.SpiderLoots;
 import fr.dtn.noobland.feature.mobs.loot.WolfLoots;
 import fr.dtn.noobland.feature.mobs.loot.ZombieLoots;
 import fr.dtn.noobland.listener.Listener;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +22,9 @@ public class EntityDeathListener extends Listener{
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event){
         LivingEntity entity = event.getEntity();
-        plugin.getFightManager().clearEnemy(entity.getUniqueId());
+
+        if(entity instanceof Player)
+            return;
 
         if(entity.getCustomName() == null)
             return;
@@ -32,8 +36,9 @@ public class EntityDeathListener extends Listener{
         int level = Integer.parseInt(strLevel);
 
         List<ItemStack> loots = Arrays.asList(switch(event.getEntityType()){
-            case WOLF -> new WolfLoots().getLoots(entity, level);
-            case ZOMBIE -> new ZombieLoots().getLoots(entity, level);
+            case WOLF -> new WolfLoots().get(level);
+            case ZOMBIE -> new ZombieLoots().get(level);
+            case SPIDER -> new SpiderLoots().get(level);
             default -> new ItemStack[0];
         });
 
