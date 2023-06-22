@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,4 +26,6 @@ public class RankManager {
     public Rank getRank(UUID player){
         return new PlayerRank(plugin.getDbConnection(), player).getRank();
     }
+
+    public List<Rank> getRanks(){ return List.of(Rank.list); }
 }

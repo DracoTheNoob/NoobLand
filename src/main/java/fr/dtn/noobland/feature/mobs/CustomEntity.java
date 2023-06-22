@@ -51,7 +51,7 @@ public abstract class CustomEntity<E extends LivingEntity> {
         entity.setCustomName(name);
         entity.setCustomNameVisible(true);
 
-        if(level > 16){
+        if(level == 20){
             Location l = entity.getLocation();
             Bukkit.broadcastMessage(entity.getCustomName() + "§9 est apparu en §c" + l.getX() + "§9,§c" + l.getY() + "§9,§c" + l.getZ() + "§9 !");
         }

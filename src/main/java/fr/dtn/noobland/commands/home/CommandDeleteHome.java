@@ -31,17 +31,11 @@ public class CommandDeleteHome extends CommandExecutor {
         HomeManager manager = plugin.getHomeManager();
 
         if(args.length == 0){
-            Inventory ui = Bukkit.createInventory(null, 45, "Choix du home");
-            List<String> homes = manager.listHomesName(owner);
+            Inventory ui = manager.getHomesUI(player.getUniqueId());
 
-            if(homes.size() == 0){
+            if(ui == null){
                 player.sendMessage(message.get("home.empty_list"));
                 return true;
-            }
-
-            for(int i = 0; i < homes.size(); i++){
-                Home home = manager.getHome(owner, homes.get(i));
-                ui.setItem( (i > 3) ? ( 28 + (2 * (i - 4))) : (10 + 2 * i), home.getIcon());
             }
 
             player.openInventory(ui);

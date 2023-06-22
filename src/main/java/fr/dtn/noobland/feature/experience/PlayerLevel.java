@@ -1,6 +1,4 @@
-package fr.dtn.noobland.feature.levels;
-
-import org.bukkit.Bukkit;
+package fr.dtn.noobland.feature.experience;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +63,7 @@ public class PlayerLevel {
             levels++;
         }
 
-        this.experience = (int)(1000 * this.experience) / 1000f;
+        this.experience = (int)(100 * this.experience) / 100f;
         save(connection);
         return levels;
     }

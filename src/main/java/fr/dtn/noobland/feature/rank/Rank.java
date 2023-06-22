@@ -6,7 +6,7 @@ public class Rank {
     private final String simpleDisplay;
     private final int importance;
 
-    private static final Rank[] ranks = {
+    protected static final Rank[] list = {
             new Rank("administrator", "§cAdministrateur", 10),
             new Rank("developer", "§aDéveloppeur", 8),
             new Rank("player", "§eJoueur§", 1)
@@ -22,7 +22,7 @@ public class Rank {
     public Rank(String id){
         this.id = id;
 
-        for(Rank rank : ranks) {
+        for(Rank rank : list) {
             if (rank.getId().equals(id)) {
                 this.simpleDisplay = rank.getSimpleDisplay();
                 this.display = rank.getDisplay();

@@ -21,26 +21,26 @@ public class BlockBreakListener extends Listener {
     static{
         experiences = new HashMap<>();
 
-        experiences.put(Material.COAL_ORE, 0.05f);
+        experiences.put(Material.COAL_ORE, 0.1f);
         experiences.put(Material.DEEPSLATE_COAL_ORE, experiences.get(Material.COAL_ORE) * 2);
-        experiences.put(Material.COPPER_ORE, 0.06f);
+        experiences.put(Material.COPPER_ORE, 0.12f);
         experiences.put(Material.DEEPSLATE_COPPER_ORE, experiences.get(Material.COPPER_ORE) * 2);
-        experiences.put(Material.IRON_ORE, 0.1f);
+        experiences.put(Material.IRON_ORE, 0.3f);
         experiences.put(Material.DEEPSLATE_IRON_ORE, experiences.get(Material.IRON_ORE) * 2);
 
-        experiences.put(Material.GOLD_ORE, 0.9f);
+        experiences.put(Material.GOLD_ORE, 1.2f);
         experiences.put(Material.DEEPSLATE_GOLD_ORE, experiences.get(Material.GOLD_ORE) * 2);
-        experiences.put(Material.LAPIS_ORE, 0.8f);
+        experiences.put(Material.LAPIS_ORE, 1f);
         experiences.put(Material.DEEPSLATE_LAPIS_ORE, experiences.get(Material.LAPIS_ORE) * 2);
-        experiences.put(Material.REDSTONE_ORE, 0.2f);
+        experiences.put(Material.REDSTONE_ORE, 0.4f);
         experiences.put(Material.DEEPSLATE_REDSTONE_ORE, experiences.get(Material.REDSTONE_ORE) * 2);
-        experiences.put(Material.DIAMOND_ORE, 2.3f);
+        experiences.put(Material.DIAMOND_ORE, 3f);
         experiences.put(Material.DEEPSLATE_DIAMOND_ORE, experiences.get(Material.DIAMOND_ORE) * 2);
-        experiences.put(Material.EMERALD_ORE, 3f);
+        experiences.put(Material.EMERALD_ORE, 5f);
         experiences.put(Material.DEEPSLATE_EMERALD_ORE, experiences.get(Material.EMERALD_ORE) * 2);
 
-        experiences.put(Material.NETHER_GOLD_ORE, 0.05f);
-        experiences.put(Material.NETHER_QUARTZ_ORE, 0.05f);
+        experiences.put(Material.NETHER_GOLD_ORE, 0.1f);
+        experiences.put(Material.NETHER_QUARTZ_ORE, 0.15f);
     }
     public BlockBreakListener(Plugin plugin) { super(plugin); }
 

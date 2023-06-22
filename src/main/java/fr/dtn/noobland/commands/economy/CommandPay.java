@@ -3,6 +3,7 @@ package fr.dtn.noobland.commands.economy;
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.command.CommandExecutor;
 import fr.dtn.noobland.command.PluginCommand;
+import fr.dtn.noobland.completers.PayCompleter;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@PluginCommand(name = "pay", description = "Send an amount of money to another player.")
+@PluginCommand(name = "pay", description = "Send an amount of money to another player.", completer = PayCompleter.class)
 public class CommandPay extends CommandExecutor {
     public CommandPay(Plugin plugin) { super(plugin); }
 

@@ -3,7 +3,7 @@ package fr.dtn.noobland.listener.entity;
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
-import fr.dtn.noobland.feature.levels.ExperienceManager;
+import fr.dtn.noobland.feature.experience.ExperienceManager;
 import fr.dtn.noobland.listener.Listener;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

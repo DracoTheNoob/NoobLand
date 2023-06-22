@@ -2,6 +2,7 @@ package fr.dtn.noobland;
 
 import fr.dtn.noobland.command.Command;
 import fr.dtn.noobland.command.PluginCommand;
+import fr.dtn.noobland.command.TabCompleter;
 import fr.dtn.noobland.commands.CommandSpawn;
 import fr.dtn.noobland.commands.economy.CommandMarket;
 import fr.dtn.noobland.commands.economy.CommandPay;
@@ -14,7 +15,7 @@ import fr.dtn.noobland.db.Database;
 import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
 import fr.dtn.noobland.feature.home.HomeManager;
-import fr.dtn.noobland.feature.levels.ExperienceManager;
+import fr.dtn.noobland.feature.experience.ExperienceManager;
 import fr.dtn.noobland.feature.rank.Rank;
 import fr.dtn.noobland.feature.rank.RankManager;
 import fr.dtn.noobland.listener.Listener;
@@ -137,7 +138,23 @@ public class Plugin extends JavaPlugin{
                 PluginCommand annotation = c.getAnnotation(PluginCommand.class);
                 CommandExecutor executor = c.getConstructor(Plugin.class).newInstance(this);
                 Command command = new Command(annotation.name(), annotation.description(), executor, annotation.aliases());
+                Class<? extends TabCompleter> completerClass = annotation.completer();
+                TabCompleter completer;
 
+                try{
+                    if(completerClass == null || completerClass == TabCompleter.class)
+                        completer = null;
+                    else
+                        completer = completerClass.getConstructor(Plugin.class).newInstance(this);
+                }catch(NoSuchMethodException e){
+                    throw new RuntimeException("Unable to load tab completer from '" + completerClass.getName() + "' : Unable to find constructor");
+                }catch(InstantiationException | InvocationTargetException e){
+                    throw new RuntimeException("Unable to load tab completer from '" + completerClass.getName() + "' : Unable to create an instance");
+                }catch(IllegalAccessException e){
+                    throw new RuntimeException("Unable to load tab completer from '" + completerClass.getName() + "' : Constructor is not public");
+                }
+
+                command.setCompleter(completer);
                 server.getCommandMap().register(getName(), command);
                 System.out.println("[REGISTRATION][COMMAND]: '" + command.getName() + "' from '" + c.getName() + "'");
             }catch(NoSuchMethodException e){

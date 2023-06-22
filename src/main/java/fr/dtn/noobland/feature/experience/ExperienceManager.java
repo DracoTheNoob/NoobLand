@@ -1,4 +1,4 @@
-package fr.dtn.noobland.feature.levels;
+package fr.dtn.noobland.feature.experience;
 
 import fr.dtn.noobland.MessageManager;
 import fr.dtn.noobland.Plugin;

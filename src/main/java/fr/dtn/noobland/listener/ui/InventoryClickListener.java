@@ -21,7 +21,7 @@ public class InventoryClickListener extends Listener {
 
         String title = event.getView().getTitle();
 
-        if(title.equals("§cChoix du monde")){
+        if(title.equals("§cChoix du home")){
             event.setCancelled(true);
             new HomeChooseUiHandler().handle(plugin, event, clicked);
         }else if(title.contains("§cMarket")){

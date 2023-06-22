@@ -13,6 +13,6 @@ public abstract class TabCompleter implements org.bukkit.command.TabCompleter {
 
     public TabCompleter(Plugin plugin){ this.plugin = plugin; }
 
-    @Nullable @Override
+    @NotNull @Override
     public abstract List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args);
 }

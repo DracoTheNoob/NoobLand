@@ -3,6 +3,7 @@ package fr.dtn.noobland.commands.ranks;
 import fr.dtn.noobland.Plugin;
 import fr.dtn.noobland.command.CommandExecutor;
 import fr.dtn.noobland.command.PluginCommand;
+import fr.dtn.noobland.completers.RankCompleter;
 import fr.dtn.noobland.feature.rank.Rank;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@PluginCommand(name = "rank", description = "Set a specified rank to the targeted player.")
+@PluginCommand(name = "rank", description = "Set a specified rank to the targeted player.", completer = RankCompleter.class)
 public class CommandRank extends CommandExecutor{
     public CommandRank(Plugin plugin) { super(plugin); }
 

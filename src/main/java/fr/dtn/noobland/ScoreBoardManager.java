@@ -1,10 +1,7 @@
 package fr.dtn.noobland;
 
-import fr.dtn.noobland.feature.economy.EconomyManager;
 import fr.dtn.noobland.feature.fight.FightManager;
-import fr.dtn.noobland.feature.levels.ExperienceManager;
-import fr.dtn.noobland.feature.rank.Rank;
-import fr.dtn.noobland.feature.rank.RankManager;
+import fr.dtn.noobland.feature.experience.ExperienceManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
