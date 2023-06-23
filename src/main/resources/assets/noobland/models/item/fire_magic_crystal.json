@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "noobland:item/fire_magic_crystal"
+  }
+}

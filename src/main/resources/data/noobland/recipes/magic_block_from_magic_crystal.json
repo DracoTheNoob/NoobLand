@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "noobland:magic_crystal"
+    }
+  },
+  "result": {
+    "item": "noobland:magic_block"
+  }
+}

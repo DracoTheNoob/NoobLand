@@ -1,0 +1,15 @@
+{
+  "item.noobland.magic_crystal": "Magic Crystal",
+  "item.noobland.raw_magic_crystal": "Raw Magic Crystal",
+  "item.noobland.fire_magic_crystal": "Fire Magic Crystal",
+  "item.noobland.earth_magic_crystal": "Earth Magic Crystal",
+  "item.noobland.water_magic_crystal": "Water Magic Crystal",
+  "item.noobland.thunder_magic_crystal": "Thunder Magic Crystal",
+
+  "block.noobland.magic_ore": "Magic Ore",
+  "block.noobland.deepslate_magic_ore": "Deepslate Magic Ore",
+  "block.noobland.magic_block": "Magic Block",
+
+  "creativetab.noobland_items": "Noob Land - Items",
+  "creativetab.noobland_blocks": "Noob Land - Blocks"
+}

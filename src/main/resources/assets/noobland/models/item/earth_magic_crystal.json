@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "noobland:item/earth_magic_crystal"
+  }
+}

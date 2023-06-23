@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.9,
+  "group": "magic_crystal",
+  "ingredient": {
+    "item": "noobland:raw_magic_crystal"
+  },
+  "result": "noobland:magic_crystal"
+}
