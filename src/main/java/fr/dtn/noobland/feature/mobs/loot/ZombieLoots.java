@@ -11,8 +11,8 @@ public class ZombieLoots extends CustomLoots{
     @Override
     protected HashMap<Material, Integer> generateLoots(HashMap<Material, Integer> loots, int level) {
         loots.put(Material.ROTTEN_FLESH, getAtLeastAmount(level, 2));
-        loots.put(Material.POTATO, getAtLeastAmount(level, 6));
-        loots.put(Material.IRON_INGOT, getAtLeastAmount(level, 8));
+        loots.put(Material.POTATO, getAmount(level, 6));
+        loots.put(Material.IRON_INGOT, getAmount(level, 8));
 
         return loots;
     }

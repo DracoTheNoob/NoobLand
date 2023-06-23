@@ -75,7 +75,7 @@ public class ExperienceManager extends Manager{
             if(level % 5 == 0) {
                 PotionEffect effect = effects[effectsAmount-1];
                 String name = effect.getType().getName();
-                String amplifier = String.valueOf(effect.getAmplifier());
+                String amplifier = String.valueOf(effect.getAmplifier()+1);
                 player.sendMessage(message.get("level.effect").replace("%effect%", name).replace("%amplifier%", amplifier));
             }
         }

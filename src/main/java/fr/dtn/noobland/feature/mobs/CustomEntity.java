@@ -47,7 +47,7 @@ public abstract class CustomEntity<E extends LivingEntity> {
         Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)).setBaseValue(calculateAttack(level));
         Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(calculateSpeed(level));
 
-        String name = "§6" + entity.getName().replaceFirst(first, first.toUpperCase()) + " §7[lvl. §c" + level + "§7] " + (int)getHealth() + "§4❤";
+        String name = (level == 20 ? "§9" : "§6") + entity.getName().replaceFirst(first, first.toUpperCase()) + " §7[lvl. §c" + level + "§7] " + (int)getHealth() + "§4❤";
         entity.setCustomName(name);
         entity.setCustomNameVisible(true);
 

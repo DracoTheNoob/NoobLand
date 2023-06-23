@@ -32,10 +32,9 @@ public abstract class CustomLoots {
         if(level < requirement)
             return 0;
 
-        return new Random().nextInt(0, level/requirement);
+        return new Random().nextInt(0, level/requirement+1);
     }
 
-    protected int getAtLeastAmount(int level, int requirement){ return new Random().nextInt(0, Math.max(level / requirement, 1)); }
-
+    protected int getAtLeastAmount(int level, int requirement){ return new Random().nextInt(0, Math.max(level / requirement+1, 2)); }
     protected abstract HashMap<Material, Integer> generateLoots(HashMap<Material, Integer> loots, int level);
 }

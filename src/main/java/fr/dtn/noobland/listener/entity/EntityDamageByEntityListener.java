@@ -45,7 +45,7 @@ public class EntityDamageByEntityListener extends Listener {
             if(level < 5) {
                 return;
             }else if(level < 12) {
-                victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (level - 5) * 40, (level - 5) / 4, true, true));
+                victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, level * 20, (level - 5) / 4, true, true));
             }else if(level < 20) {
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, level * 10, (level - 12) / 5, true, true));
             }else{
@@ -69,7 +69,7 @@ public class EntityDamageByEntityListener extends Listener {
         experience.addExperience(player.getUniqueId(), earning);
 
         EconomyManager manager = plugin.getEconomyManager();
-        double money = manager.getPriceOf(victim.getType(), level);
+        double money = manager.getPriceOf(level);
 
         manager.add(player.getUniqueId(), money);
         String msg = message.get("mob.slay").replace("%money%", String.valueOf(money)).replace("%exp%", String.valueOf(earning));

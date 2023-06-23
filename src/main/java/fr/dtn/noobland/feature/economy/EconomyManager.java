@@ -19,17 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class EconomyManager extends Manager {
-    private static final HashMap<EntityType, Double> prices;
     private static final ItemStack previousPage;
     private static final ItemStack nextPage;
 
     static{
-        prices = new HashMap<>();
-
-        prices.put(EntityType.WOLF, 1.2);
-        prices.put(EntityType.ZOMBIE, 0.8);
-        prices.put(EntityType.SPIDER, 0.7);
-
         previousPage = new ItemStack(Material.ARROW);
         ItemMeta previousMeta = previousPage.getItemMeta();
         assert previousMeta != null;
@@ -45,12 +38,8 @@ public class EconomyManager extends Manager {
 
     public EconomyManager(Plugin plugin){ super(plugin); }
 
-    public double getPriceOf(EntityType type, int level){
-        if(prices.get(type) == null)
-            return 0;
-
-        double priceModifier = prices.get(type);
-        return (int)(Math.pow(1.2, level - 9) * priceModifier * 100) / 100.0;
+    public double getPriceOf(int level){
+        return (int)(Math.pow(1.2, level - 9) * 100) / 100.0;
     }
 
     public double getBalance(UUID owner){

@@ -1,4 +1,7 @@
-name: NoobLand
+name: NoobLanda
 version: 0.0
 api-version: 1.19
 main: fr.dtn.noobland.Plugin
+author: DracoLeNoob
+database: true
+description: A plugin for a private minecraft server.

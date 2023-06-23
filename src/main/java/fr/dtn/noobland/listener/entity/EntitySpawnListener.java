@@ -1,10 +1,7 @@
 package fr.dtn.noobland.listener.entity;
 
 import fr.dtn.noobland.Plugin;
-import fr.dtn.noobland.feature.mobs.CustomEntity;
-import fr.dtn.noobland.feature.mobs.CustomSpider;
-import fr.dtn.noobland.feature.mobs.CustomWolf;
-import fr.dtn.noobland.feature.mobs.CustomZombie;
+import fr.dtn.noobland.feature.mobs.*;
 import fr.dtn.noobland.listener.Listener;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -37,12 +34,13 @@ public class EntitySpawnListener extends Listener {
             case WOLF -> new CustomWolf(plugin, (Wolf) entity, randomLevel());
             case ZOMBIE, ZOMBIE_VILLAGER, HUSK -> new CustomZombie((Zombie) entity, randomLevel());
             case SPIDER -> new CustomSpider((Spider) entity, randomLevel());
+            case SKELETON -> new CustomSkeleton(plugin, (Skeleton) entity, randomLevel());
             default -> null;
         };
 
         if(custom == null) {
-            event.setCancelled(true);
             entity.remove();
+            event.setCancelled(true);
             return;
         }
 
